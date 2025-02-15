@@ -15,7 +15,7 @@ public class LEDSubsystem extends SubsystemBase {
   private CANdle candle;
 
   public LEDSubsystem() {
-    candle = new CANdle(15);
+    candle = new CANdle(0);
 
     CANdleConfiguration configAll = new CANdleConfiguration();
     configAll.statusLedOffWhenActive = false;

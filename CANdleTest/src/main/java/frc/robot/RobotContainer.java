@@ -5,10 +5,13 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.subsystems.CANdleSystem;
+import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.commands.CANdleConfigCommands;
 import frc.robot.commands.CANdlePrintCommands;
+import frc.robot.commands.LEDCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
@@ -26,7 +29,14 @@ public class RobotContainer {
   private final CANdleSystem m_candleSubsystem = new CANdleSystem(joy);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  LEDSubsystem m_LEDSubsystem;
+  LEDCommand m_LEDCommand;
+  Joystick joystick;
+  JoystickButton jb;
   public RobotContainer() {
+    m_LEDSubsystem = new LEDSubsystem();
+    joystick = new Joystick(0);
+    m_LEDCommand = new LEDCommand(m_LEDSubsystem, joystick);
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -50,5 +60,8 @@ public class RobotContainer {
     new JoystickButton(joy, Constants.V5Button).onTrue(new CANdlePrintCommands.Print5V(m_candleSubsystem));
     new JoystickButton(joy, Constants.CurrentButton).onTrue(new CANdlePrintCommands.PrintCurrent(m_candleSubsystem));
     new JoystickButton(joy, Constants.TemperatureButton).onTrue(new CANdlePrintCommands.PrintTemperature(m_candleSubsystem));
+
+    jb = new JoystickButton(joystick, 1);
+    jb.whileTrue(m_LEDCommand);
   }
 }
